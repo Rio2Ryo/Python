@@ -202,10 +202,15 @@ def contact():
 このメールは自動送信されています。
 '''
                 # メッセージの作成
+                # メール送信の詳細をログに記録
+                app.logger.info(f'送信者: {app.config["MAIL_DEFAULT_SENDER"]}')
+                app.logger.info(f'送信先: rmatsuura.int@gmail.com')
+                app.logger.debug(f'メール本文:\n{email_body}')
+
                 msg = Message(
                     subject='【コネクトソル】新規お問い合わせ',
-                    sender=app.config['MAIL_DEFAULT_SENDER'],
-                    recipients=[app.config['MAIL_USERNAME']],
+                    sender=('株式会社コネクトソル', 'info@connectsol-corp.com'),
+                    recipients=['rmatsuura.int@gmail.com'],
                     body=email_body
                 )
 
