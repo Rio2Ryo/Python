@@ -44,12 +44,12 @@ logger = logging.getLogger('flask.app')
 
 # SSLコンテキストの設定
 # メール設定
-app.config['MAIL_SERVER'] = os.getenv('XSERVER_SMTP_HOST')
-app.config['MAIL_USERNAME'] = 'merci0435171@yahoo.co.jp'
-app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_SERVER'] = 'sv15011.xserver.jp'  # Xserverのメールサーバー
+app.config['MAIL_USERNAME'] = 'info@connectsol-corp.com'
+app.config['MAIL_PASSWORD'] = 'Cs20240311'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_DEFAULT_SENDER'] = 'merci0435171@yahoo.co.jp'
+app.config['MAIL_DEFAULT_SENDER'] = 'info@connectsol-corp.com'
 
 from models import News, Contact, Admin
 # Initialize Flask-Admin and CKEditor
