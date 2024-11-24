@@ -417,6 +417,32 @@ body {
 }
 
 .form-control {
+/* Contact Section Styles */
+#contact {
+    background-color: var(--background);
+    padding: calc(var(--spacing-unit) * 4) 0;
+}
+
+#contact .contact-form {
+    background-color: white;
+    padding: calc(var(--spacing-unit) * 3);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border-radius: var(--border-radius);
+}
+
+#contact .section-title {
+    text-align: center;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+#contact .form-control,
+#contact .form-select {
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+#contact .btn-primary {
+    margin-top: calc(var(--spacing-unit) * 2);
+}
   border-radius: 0;
   border: 1px solid #ddd;
   padding: calc(var(--spacing-unit) * 0.75);
