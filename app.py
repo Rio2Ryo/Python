@@ -43,12 +43,15 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('flask.app')
 
 # SSLコンテキストの設定
-app.config['MAIL_PASSWORD'] = 'an0710027'
-context = ssl.create_default_context()
+# メール設定
+app.config['MAIL_SERVER'] = os.getenv('XSERVER_SMTP_HOST')
+app.config['MAIL_USERNAME'] = 'merci0435171@yahoo.co.jp'
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_DEFAULT_SENDER'] = 'merci0435171@yahoo.co.jp'
+
 from models import News, Contact, Admin
-context.check_hostname = False
-context.verify_mode = ssl.CERT_NONE
-app.config['MAIL_SSL_CONTEXT'] = context
 # Initialize Flask-Admin and CKEditor
 admin = FlaskAdmin(app, name='管理画面', template_mode='bootstrap4', url='/admin', endpoint='admin')
 ckeditor = CKEditor(app)
@@ -165,7 +168,7 @@ def contact():
                 
                 msg = Message(
                     subject='新規お問い合わせ',
-                    recipients=[app.config['MAIL_USERNAME']],
+                    recipients=['rmatsuura.int@gmail.com'],
                     body=f'''
 新規のお問い合わせがありました。
 
