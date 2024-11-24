@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa');">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="display-4">管理ダッシュボード</h1>
+        </div>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="list-group">
+                    <a href="{{ url_for('admin_dashboard') }}" class="list-group-item list-group-item-action active">
+                        ダッシュボード
+                    </a>
+                    <a href="{{ url_for('admin_news') }}" class="list-group-item list-group-item-action">
+                        ニュース管理
+                    </a>
+                    <a href="{{ url_for('admin_contacts') }}" class="list-group-item list-group-item-action">
+                        お問い合わせ管理
+                    </a>
+                    <a href="{{ url_for('admin_logout') }}" class="list-group-item list-group-item-action text-danger">
+                        ログアウト
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">最近の活動</h2>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">新規お問い合わせ</h5>
+                                        <p class="card-text display-4">{{ contacts_count }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">公開中のニュース</h5>
+                                        <p class="card-text display-4">{{ news_count }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

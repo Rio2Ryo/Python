@@ -191,8 +191,18 @@ body {
 }
 
 .navbar {
-  background-color: rgba(26, 35, 126, 0.9);
+  background-color: var(--primary);
   padding: 1rem 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.navbar.scrolled {
+  background-color: var(--primary);
+}
+
+/* ヒーローセクションの上部に余白を追加 */
+.hero {
+  padding-top: 120px;
 }
 
 .navbar-brand {
@@ -307,7 +317,7 @@ body {
 }
 
 .footer {
-  background-color: var(--navy);
+  background-color: var(--primary);
   color: var(--text-light);
   padding: 1rem 0;
   margin-top: 5rem;

@@ -5,6 +5,8 @@ from datetime import datetime
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class Base(DeclarativeBase):
     pass
@@ -44,7 +46,16 @@ app.config['MAIL_SSL_CONTEXT'] = context
 db.init_app(app)
 mail = Mail(app)
 
-from models import News, Contact
+# Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'admin_login'
+
+from models import News, Contact, Admin
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Admin.query.get(int(user_id))
 
 @app.route('/')
 def index():
@@ -150,5 +161,59 @@ def contact():
         return redirect(url_for('contact'))
     return render_template('contact.html')
 
+# Admin routes
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if current_user.is_authenticated:
+        return redirect(url_for('admin_dashboard'))
+    
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        user = Admin.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password_hash, password):
+            login_user(user)
+            return redirect(url_for('admin_dashboard'))
+        
+        flash('ユーザー名またはパスワードが正しくありません。', 'danger')
+    return render_template('admin/login.html')
+
+@app.route('/admin/logout')
+@login_required
+def admin_logout():
+    logout_user()
+    return redirect(url_for('admin_login'))
+
+@app.route('/admin/dashboard')
+@login_required
+def admin_dashboard():
+    news_count = News.query.count()
+    contacts_count = Contact.query.filter_by(status='新規').count()
+    return render_template('admin/dashboard.html', 
+                         news_count=news_count, 
+                         contacts_count=contacts_count)
+
+@app.route('/admin/news')
+@login_required
+def admin_news():
+    news_items = News.query.order_by(News.date.desc()).all()
+    return render_template('admin/news.html', news_items=news_items)
+
+@app.route('/admin/contacts')
+@login_required
+def admin_contacts():
+    contacts = Contact.query.order_by(Contact.date.desc()).all()
+    return render_template('admin/contacts.html', contacts=contacts)
+
 with app.app_context():
     db.create_all()
+    # Create default admin user if not exists
+    if not Admin.query.filter_by(username='admin').first():
+        admin = Admin(
+            username='admin',
+            email='admin@example.com',
+            password_hash=generate_password_hash('admin123')
+        )
+        db.session.add(admin)
+        db.session.commit()
