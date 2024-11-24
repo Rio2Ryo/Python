@@ -12,40 +12,60 @@
 <section class="section">
     <div class="container">
         <div class="row">
-            {% for news in news_items.items %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    {% if news.image_url %}
-                    <img src="{{ news.image_url }}" class="card-img-top" alt="{{ news.title }}">
-                    {% else %}
-                    <img src="https://images.unsplash.com/photo-1718220216044-006f43e3a9b1" class="card-img-top" alt="デフォルト画像">
-                    {% endif %}
+                    <img src="https://images.unsplash.com/photo-1718220216044-006f43e3a9b1" class="card-img-top" alt="新オフィス">
                     <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">{{ news.date.strftime('%Y年%m月%d日') }}</h6>
-                        <h5 class="card-title">{{ news.title }}</h5>
-                        <p class="card-text">{{ news.summary }}</p>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newsModal{{ news.id }}">
+                        <h6 class="card-subtitle mb-2 text-muted">2024年11月24日</h6>
+                        <h5 class="card-title">新オフィスへの移転のお知らせ</h5>
+                        <p class="card-text">より良いサービス提供のため、本社オフィスを移転いたしました。</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newsModal1">
                             詳細を見る
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="newsModal{{ news.id }}" tabindex="-1" aria-hidden="true">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://images.unsplash.com/photo-1681900525782-5af6ac1a9897" class="card-img-top" alt="クラウドソリューション">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">2024年11月15日</h6>
+                        <h5 class="card-title">クラウドソリューション事業部の設立</h5>
+                        <p class="card-text">お客様のデジタルトランスフォーメーションを支援するため、新事業部を設立しました。</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newsModal2">
+                            詳細を見る
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://images.unsplash.com/photo-1527752002957-af97f18a0c81" class="card-img-top" alt="技術セミナー">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">2024年11月1日</h6>
+                        <h5 class="card-title">技術セミナー開催のお知らせ</h5>
+                        <p class="card-text">最新のテクノロジートレンドについて、オンラインセミナーを開催いたします。</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newsModal3">
+                            詳細を見る
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modals -->
+            <div class="modal fade" id="newsModal1" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">{{ news.title }}</h5>
+                            <h5 class="modal-title">新オフィスへの移転のお知らせ</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            {% if news.image_url %}
-                            <img src="{{ news.image_url }}" class="img-fluid mb-3" alt="{{ news.title }}">
-                            {% endif %}
-                            <p class="text-muted">{{ news.date.strftime('%Y年%m月%d日') }}</p>
+                            <p class="text-muted">2024年11月24日</p>
                             <div class="news-content">
-                                {{ news.content|safe }}
+                                <p>より良いサービス提供のため、本社オフィスを移転いたしました。新オフィスでは、より充実した環境でお客様のニーズにお応えできるよう、設備を整えております。</p>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -54,7 +74,46 @@
                     </div>
                 </div>
             </div>
-            {% endfor %}
+
+            <div class="modal fade" id="newsModal2" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">クラウドソリューション事業部の設立</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-muted">2024年11月15日</p>
+                            <div class="news-content">
+                                <p>お客様のデジタルトランスフォーメーションを支援するため、新事業部を設立しました。クラウドテクノロジーを活用した最新のソリューションを提供してまいります。</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="newsModal3" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">技術セミナー開催のお知らせ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-muted">2024年11月1日</p>
+                            <div class="news-content">
+                                <p>最新のテクノロジートレンドについて、オンラインセミナーを開催いたします。ぜひご参加ください。</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Pagination -->

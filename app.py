@@ -48,8 +48,7 @@ from models import News, Contact
 
 @app.route('/')
 def index():
-    news_items = News.query.order_by(News.date.desc()).limit(3).all()
-    return render_template('index.html', news_items=news_items)
+    return render_template('index.html')
 
 @app.route('/about')
 def about():
@@ -65,15 +64,7 @@ def privacy():
 
 @app.route('/news')
 def news():
-    page = request.args.get('page', 1, type=int)
-    news_items = News.query.order_by(News.date.desc()).paginate(
-        page=page, per_page=6, error_out=False)
-    return render_template('news.html', news_items=news_items)
-
-@app.route('/news/<int:id>')
-def news_detail(id):
-    news = News.query.get_or_404(id)
-    return render_template('news_detail.html', news=news)
+    return render_template('news.html')
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -145,30 +136,3 @@ def contact():
 
 with app.app_context():
     db.create_all()
-    
-    # Add sample news if none exist
-    if not News.query.first():
-        for news_data in [
-            {
-                "title": "新オフィスへの移転のお知らせ",
-                "content": "より良いサービス提供のため、本社オフィスを移転いたしました。",
-                "summary": "本社オフィス移転のお知らせ"
-            },
-            {
-                "title": "クラウドソリューション事業部の設立",
-                "content": "お客様のデジタルトランスフォーメーションを支援するため、新事業部を設立しました。",
-                "summary": "新事業部設立のお知らせ"
-            },
-            {
-                "title": "技術セミナー開催のお知らせ",
-                "content": "最新のテクノロジートレンドについて、オンラインセミナーを開催いたします。",
-                "summary": "技術セミナー開催"
-            }
-        ]:
-            news = News()
-            news.title = news_data["title"]
-            news.content = news_data["content"]
-            news.summary = news_data["summary"]
-            news.date = datetime.now()
-            db.session.add(news)
-        db.session.commit()
