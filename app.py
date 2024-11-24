@@ -19,13 +19,13 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 }
 
 # メール設定
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = 'connectsol2024'
+app.config['MAIL_SERVER'] = os.environ.get('XSERVER_SMTP_HOST')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', '587'))
+app.config['MAIL_USERNAME'] = os.environ.get('XSERVER_SMTP_USER')
+app.config['MAIL_PASSWORD'] = os.environ.get('XSERVER_SMTP_PASSWORD')
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('XSERVER_SMTP_USER')
 app.config['MAIL_DEBUG'] = True  # デバッグログを有効化
 app.config['MAIL_MAX_EMAILS'] = None
 app.config['MAIL_SUPPRESS_SEND'] = False
