@@ -1,9 +1,14 @@
 import os
 import ssl
 from flask_mail import Mail, Message
+from flask_admin import Admin as FlaskAdmin
+from flask_admin.contrib.sqla import ModelView
+from flask_ckeditor import CKEditor
 from datetime import datetime
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import DeclarativeBase
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -39,9 +44,43 @@ logger = logging.getLogger('flask.app')
 
 # SSLコンテキストの設定
 context = ssl.create_default_context()
+from models import News, Contact, Admin
 context.check_hostname = False
 context.verify_mode = ssl.CERT_NONE
 app.config['MAIL_SSL_CONTEXT'] = context
+# Initialize Flask-Admin and CKEditor
+admin = FlaskAdmin(app, name='管理画面', template_mode='bootstrap4')
+ckeditor = CKEditor(app)
+
+# Add model views
+class NewsAdmin(ModelView):
+    column_list = ('title', 'date', 'summary')
+    form_columns = ('title', 'content', 'summary', 'image_url', 'date')
+    column_labels = {
+        'title': 'タイトル',
+        'content': '内容',
+        'summary': '概要',
+        'image_url': '画像URL',
+        'date': '日付'
+    }
+
+class ContactAdmin(ModelView):
+    column_list = ('name', 'company', 'email', 'subject', 'date', 'status')
+    form_columns = ('name', 'company', 'email', 'phone', 'subject', 'message', 'status')
+    column_labels = {
+        'name': '氏名',
+        'company': '会社名',
+        'email': 'メールアドレス',
+        'phone': '電話番号',
+        'subject': '件名',
+        'message': 'メッセージ',
+        'date': '日付',
+        'status': 'ステータス'
+    }
+
+# Register model views
+admin.add_view(NewsAdmin(News, db.session, name='ニュース管理'))
+admin.add_view(ContactAdmin(Contact, db.session, name='お問い合わせ管理'))
 
 db.init_app(app)
 mail = Mail(app)
@@ -50,8 +89,6 @@ mail = Mail(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'admin_login'
-
-from models import News, Contact, Admin
 
 @login_manager.user_loader
 def load_user(user_id):
