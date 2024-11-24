@@ -32,6 +32,10 @@ def about():
 def services():
     return render_template('services.html')
 
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
 @app.route('/news')
 @app.route('/news/<int:id>')
 def news_detail(id):
