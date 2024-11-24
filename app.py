@@ -1,4 +1,5 @@
 import os
+import ssl
 from flask_mail import Mail, Message
 from datetime import datetime
 from flask import Flask, render_template, request, flash, redirect, url_for
@@ -19,13 +20,15 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 
 # メール設定
 app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
-app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 465))
+app.config['MAIL_PORT'] = 587  # TLSポートを使用
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
 app.config['MAIL_DEBUG'] = app.debug
+app.config['MAIL_MAX_EMAILS'] = None
+app.config['MAIL_SUPPRESS_SEND'] = False
 
 db.init_app(app)
 mail = Mail(app)
@@ -96,11 +99,22 @@ def contact():
             mail.send(msg)
             flash('お問い合わせありがとうございます。担当者より連絡させていただきます。', 'success')
         except Exception as e:
-            app.logger.error(f'メール送信エラー: {str(e)}')
-            if app.debug:
-                flash(f'デバッグ情報 - メール送信エラー: {str(e)}', 'error')
+            import traceback
+            error_details = traceback.format_exc()
+            app.logger.error(f'メール送信エラー:\n{error_details}')
+            
+            if isinstance(e, ssl.SSLError):
+                app.logger.error(f'SSLエラーの詳細: プロトコル={e.reason}, エラーコード={e.errno if hasattr(e, "errno") else "不明"}')
+                if app.debug:
+                    flash(f'SSL接続エラー: {e.reason}。メールサーバーの設定を確認してください。', 'error')
+                else:
+                    flash('メールシステムに一時的な問題が発生しています。ご不便をおかけしますが、しばらく時間をおいて再度お試しください。', 'error')
             else:
-                flash('申し訳ありません。システムエラーが発生しました。しばらく時間をおいて再度お試しください。', 'error')
+                if app.debug:
+                    flash(f'メール送信エラー: {str(e)}', 'error')
+                else:
+                    flash('申し訳ありません。お問い合わせの送信中にエラーが発生しました。しばらく時間をおいて再度お試しください。', 'error')
+            
             return render_template('contact.html')
 
         return redirect(url_for('contact'))
