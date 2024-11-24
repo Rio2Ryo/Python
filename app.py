@@ -47,11 +47,11 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 # メール設定
 app.config['MAIL_SERVER'] = 'sv15011.xserver.jp'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = os.environ.get('XSERVER_SMTP_USER')
-app.config['MAIL_PASSWORD'] = os.environ.get('XSERVER_SMTP_PASSWORD')
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('XSERVER_SMTP_USER')
+app.config['MAIL_USERNAME'] = 'info@connectsol-corp.com'
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = ('株式会社コネクトソル', 'info@connectsol-corp.com')
 app.config['MAIL_DEBUG'] = True
 app.config['MAIL_MAX_EMAILS'] = None
 app.config['MAIL_SUPPRESS_SEND'] = False
@@ -203,14 +203,17 @@ def contact():
 '''
                 # メッセージの作成
                 # メール送信の詳細をログに記録
+                app.logger.info('メール送信の設定を確認します')
                 app.logger.info(f'送信者: {app.config["MAIL_DEFAULT_SENDER"]}')
-                app.logger.info(f'送信先: rmatsuura.int@gmail.com')
+                app.logger.info(f'送信先: info@connectsol-corp.com')
+                app.logger.info(f'SMTPサーバー: {app.config["MAIL_SERVER"]}:{app.config["MAIL_PORT"]}')
                 app.logger.debug(f'メール本文:\n{email_body}')
 
+                # SSLコンテキストを使用してメッセージを作成
                 msg = Message(
                     subject='【コネクトソル】新規お問い合わせ',
-                    sender=('株式会社コネクトソル', 'info@connectsol-corp.com'),
-                    recipients=['rmatsuura.int@gmail.com'],
+                    sender=app.config['MAIL_DEFAULT_SENDER'],
+                    recipients=['info@connectsol-corp.com'],
                     body=email_body
                 )
 
