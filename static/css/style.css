@@ -1,11 +1,14 @@
 :root {
-  --primary: #2c3e50;
-  --secondary: #34495e;
-  --accent: #d35400;
-  --background: #f8f9fa;
-  --text-dark: #2c3e50;
+  --primary: #1a237e;
+  --secondary: #283593;
+  --accent: #3949ab;
+  --background: #fafafa;
+  --text-dark: #1a237e;
   --text-light: #ffffff;
-  --spacing-unit: 1rem;
+  --spacing-unit: 1.25rem;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
 }
 
 body {
@@ -247,6 +250,100 @@ body {
 }
 
 .form-control:focus {
+/* Service Cards */
+.service-card {
+  background: var(--text-light);
+  padding: 2rem;
+  height: 100%;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.service-icon {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.service-title {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 1.5rem;
+  color: var(--primary);
+}
+
+.service-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.service-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.service-list li:last-child {
+  border-bottom: none;
+}
+
+/* News List */
+.news-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.news-item {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.news-date {
+  min-width: 120px;
+  color: var(--text-dark);
+  font-family: 'Roboto Mono', monospace;
+}
+
+.news-title {
+  flex-grow: 1;
+}
+
+.news-title a {
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.news-title a:hover {
+  color: var(--accent);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero {
+    padding: 150px 0;
+  }
+  
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  
+  .news-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .news-date {
+    margin-bottom: 0.5rem;
+  }
+}
   box-shadow: none;
   border-color: var(--primary);
 }

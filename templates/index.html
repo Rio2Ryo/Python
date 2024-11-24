@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="hero" style="background-image: url('https://images.unsplash.com/photo-1704440278730-b420f5892700');">
+<div class="hero" style="background-image: url('https://images.unsplash.com/photo-1519501025264-65ba15a82390');">
     <div class="container">
         <div class="hero-content">
-            <h1 class="display-4 mb-4">未来を創造する、<br>テクノロジーで世界をつなぐ</h1>
-            <p class="lead mb-4">最先端のソリューションで、ビジネスの可能性を広げます</p>
-            <a href="/contact" class="btn btn-primary btn-lg">お問い合わせ</a>
+            <h1 class="display-4 mb-4">人とテクノロジーで、<br>未来を変える。</h1>
+            <p class="lead mb-4">最先端のテクノロジーで、ビジネスの価値を創造します</p>
+            <a href="/contact" class="btn btn-outline-light btn-lg contact-btn">お問い合わせ</a>
         </div>
     </div>
 </div>
@@ -30,33 +30,48 @@
 
 <section class="section bg-light">
     <div class="container">
-        <h2 class="section-title text-center">サービス</h2>
+        <h2 class="section-title text-center">事業内容</h2>
         <div class="row">
             <div class="col-md-4">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1512799545738-0625ef92a288" class="card-img-top" alt="システム開発">
-                    <div class="card-body">
-                        <h5 class="card-title">システム開発</h5>
-                        <p class="card-text">お客様のニーズに合わせた、カスタマイズされたシステムを開発します。</p>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-code"></i>
                     </div>
+                    <h3 class="service-title">システム開発</h3>
+                    <ul class="service-list">
+                        <li>Webアプリケーション開発</li>
+                        <li>モバイルアプリケーション開発</li>
+                        <li>業務システム開発</li>
+                        <li>クラウドネイティブ開発</li>
+                    </ul>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1718220216044-006f43e3a9b1" class="card-img-top" alt="ITコンサルティング">
-                    <div class="card-body">
-                        <h5 class="card-title">ITコンサルティング</h5>
-                        <p class="card-text">経験豊富な専門家が、最適なIT戦略をご提案します。</p>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-lightbulb"></i>
                     </div>
+                    <h3 class="service-title">コンサルティング</h3>
+                    <ul class="service-list">
+                        <li>IT戦略立案</li>
+                        <li>DX推進支援</li>
+                        <li>システム構築支援</li>
+                        <li>プロジェクト管理</li>
+                    </ul>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1681900525782-5af6ac1a9897" class="card-img-top" alt="クラウドソリューション">
-                    <div class="card-body">
-                        <h5 class="card-title">クラウドソリューション</h5>
-                        <p class="card-text">最新のクラウドテクノロジーを活用したソリューションを提供します。</p>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-cogs"></i>
                     </div>
+                    <h3 class="service-title">運用・保守</h3>
+                    <ul class="service-list">
+                        <li>システム運用管理</li>
+                        <li>インフラ保守</li>
+                        <li>セキュリティ管理</li>
+                        <li>ヘルプデスク</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -65,20 +80,19 @@
 
 <section class="section">
     <div class="container">
-        <h2 class="section-title text-center">最新ニュース</h2>
-        <div class="row">
+        <h2 class="section-title">お知らせ</h2>
+        <div class="news-list">
             {% for news in news_items %}
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">{{ news.date }}</h6>
-                        <h5 class="card-title">{{ news.title }}</h5>
-                        <p class="card-text">{{ news.summary }}</p>
-                        <a href="/news/{{ news.id }}" class="card-link">詳細を見る</a>
-                    </div>
+            <div class="news-item">
+                <div class="news-date">{{ news.date.strftime('%Y.%m.%d') }}</div>
+                <div class="news-title">
+                    <a href="/news/{{ news.id }}">{{ news.title }}</a>
                 </div>
             </div>
             {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="/news" class="btn btn-outline-primary">ニュース一覧</a>
         </div>
     </div>
 </section>
