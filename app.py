@@ -19,11 +19,13 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 
 # メール設定
 app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
-app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT'))
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 465))
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_DEBUG'] = app.debug
 
 db.init_app(app)
 mail = Mail(app)
@@ -74,11 +76,12 @@ def contact():
         db.session.add(contact)
         db.session.commit()
 
-        # 管理者へのメール通知
-        msg = Message(
-            subject='新規お問い合わせ',
-            recipients=[app.config['MAIL_USERNAME']],
-            body=f'''
+        try:
+            # 管理者へのメール通知
+            msg = Message(
+                subject='新規お問い合わせ',
+                recipients=[app.config['MAIL_USERNAME']],
+                body=f'''
 新規のお問い合わせがありました。
 
 お名前: {contact.name}
@@ -88,11 +91,18 @@ def contact():
 お問い合わせ内容: {contact.subject}
 メッセージ:
 {contact.message}
-            '''
-        )
-        mail.send(msg)
+                '''
+            )
+            mail.send(msg)
+            flash('お問い合わせありがとうございます。担当者より連絡させていただきます。', 'success')
+        except Exception as e:
+            app.logger.error(f'メール送信エラー: {str(e)}')
+            if app.debug:
+                flash(f'デバッグ情報 - メール送信エラー: {str(e)}', 'error')
+            else:
+                flash('申し訳ありません。システムエラーが発生しました。しばらく時間をおいて再度お試しください。', 'error')
+            return render_template('contact.html')
 
-        flash('お問い合わせありがとうございます。担当者より連絡させていただきます。')
         return redirect(url_for('contact'))
     return render_template('contact.html')
 
