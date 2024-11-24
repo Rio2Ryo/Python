@@ -19,16 +19,22 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 }
 
 # メール設定
-app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
-app.config['MAIL_PORT'] = 587  # TLSポートを使用
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_PASSWORD'] = 'connectsol2024'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
-app.config['MAIL_DEBUG'] = app.debug
+app.config['MAIL_DEBUG'] = True  # デバッグログを有効化
 app.config['MAIL_MAX_EMAILS'] = None
 app.config['MAIL_SUPPRESS_SEND'] = False
+
+# SSLコンテキストの設定
+context = ssl.create_default_context()
+context.check_hostname = False
+context.verify_mode = ssl.CERT_NONE
+app.config['MAIL_SSL_CONTEXT'] = context
 
 db.init_app(app)
 mail = Mail(app)
@@ -81,6 +87,7 @@ def contact():
 
         try:
             # 管理者へのメール通知
+            app.logger.info('メール送信を開始します')
             msg = Message(
                 subject='新規お問い合わせ',
                 recipients=[app.config['MAIL_USERNAME']],
@@ -96,7 +103,9 @@ def contact():
 {contact.message}
                 '''
             )
+            app.logger.debug(f'メール設定: SERVER={app.config["MAIL_SERVER"]}, PORT={app.config["MAIL_PORT"]}, TLS={app.config["MAIL_USE_TLS"]}, SSL={app.config["MAIL_USE_SSL"]}')
             mail.send(msg)
+            app.logger.info('メール送信が完了しました')
             flash('お問い合わせありがとうございます。担当者より連絡させていただきます。', 'success')
         except Exception as e:
             import traceback
