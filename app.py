@@ -43,17 +43,26 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('flask.app')
 
 # SSLコンテキストの設定
+app.config['MAIL_PASSWORD'] = 'an0710027'
 context = ssl.create_default_context()
 from models import News, Contact, Admin
 context.check_hostname = False
 context.verify_mode = ssl.CERT_NONE
 app.config['MAIL_SSL_CONTEXT'] = context
 # Initialize Flask-Admin and CKEditor
-admin = FlaskAdmin(app, name='管理画面', template_mode='bootstrap4')
+admin = FlaskAdmin(app, name='管理画面', template_mode='bootstrap4', url='/admin', endpoint='admin')
 ckeditor = CKEditor(app)
 
+# Admin views configuration
+class SecureModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('admin_login'))
+
 # Add model views
-class NewsAdmin(ModelView):
+class NewsAdmin(SecureModelView):
     column_list = ('title', 'date', 'summary')
     form_columns = ('title', 'content', 'summary', 'image_url', 'date')
     column_labels = {
@@ -64,7 +73,7 @@ class NewsAdmin(ModelView):
         'date': '日付'
     }
 
-class ContactAdmin(ModelView):
+class ContactAdmin(SecureModelView):
     column_list = ('name', 'company', 'email', 'subject', 'date', 'status')
     form_columns = ('name', 'company', 'email', 'phone', 'subject', 'message', 'status')
     column_labels = {
