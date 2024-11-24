@@ -48,7 +48,8 @@ from models import News, Contact
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    news_items = News.query.order_by(News.date.desc()).limit(3).all()
+    return render_template('index.html', news_items=news_items)
 
 @app.route('/about')
 def about():
