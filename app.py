@@ -64,7 +64,9 @@ def privacy():
 
 @app.route('/news')
 def news():
-    return render_template('news.html')
+    page = request.args.get('page', 1, type=int)
+    news_items = News.query.order_by(News.date.desc()).paginate(page=page, per_page=6)
+    return render_template('news.html', news_items=news_items)
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
