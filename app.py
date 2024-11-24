@@ -44,12 +44,13 @@ logger = logging.getLogger('flask.app')
 
 # SSLコンテキストの設定
 # メール設定
-app.config['MAIL_SERVER'] = 'sv15011.xserver.jp'  # Xserverのメールサーバー
-app.config['MAIL_USERNAME'] = 'info@connectsol-corp.com'
-app.config['MAIL_PASSWORD'] = 'Cs20240311'
-app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_DEFAULT_SENDER'] = 'info@connectsol-corp.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'sv15011.xserver.jp')
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'info@connectsol-corp.com')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = ('株式会社コネクトソル', os.getenv('MAIL_USERNAME', 'info@connectsol-corp.com'))
 
 from models import News, Contact, Admin
 # Initialize Flask-Admin and CKEditor
@@ -159,17 +160,15 @@ def contact():
 
         max_retries = 3
         retry_count = 0
-        
+        retry_delay = 1  # 秒単位の待機時間
+
         while retry_count < max_retries:
             try:
-                # 管理者へのメール通知
                 app.logger.info(f'メール送信を開始します (試行回数: {retry_count + 1})')
-                app.logger.debug(f'SMTP設定: SERVER={app.config["MAIL_SERVER"]}, PORT={app.config["MAIL_PORT"]}, USER={app.config["MAIL_USERNAME"]}')
-                
-                msg = Message(
-                    subject='新規お問い合わせ',
-                    recipients=['rmatsuura.int@gmail.com'],
-                    body=f'''
+                app.logger.debug(f'SMTP設定: SERVER={app.config["MAIL_SERVER"]}, PORT={app.config["MAIL_PORT"]}, TLS={app.config["MAIL_USE_TLS"]}, SSL={app.config["MAIL_USE_SSL"]}')
+
+                # メール本文の作成
+                email_body = f'''
 新規のお問い合わせがありました。
 
 お名前: {contact.name}
@@ -177,35 +176,64 @@ def contact():
 メールアドレス: {contact.email}
 電話番号: {contact.phone}
 お問い合わせ内容: {contact.subject}
+
 メッセージ:
 {contact.message}
-                    '''
+
+このメールは自動送信されています。
+'''
+                # メッセージの作成
+                msg = Message(
+                    subject='【コネクトソル】新規お問い合わせ',
+                    sender=app.config['MAIL_DEFAULT_SENDER'],
+                    recipients=[app.config['MAIL_USERNAME']],
+                    body=email_body
                 )
-                
+
+                # メール送信
                 mail.send(msg)
                 app.logger.info('メール送信が完了しました')
                 flash('お問い合わせありがとうございます。担当者より連絡させていただきます。', 'success')
                 break
-            
+
             except Exception as e:
                 retry_count += 1
-                import traceback
+                error_type = type(e).__name__
                 error_details = traceback.format_exc()
-                app.logger.error(f'メール送信エラー:\n{error_details}')
                 
-                if retry_count >= max_retries:
-                    if isinstance(e, ssl.SSLError):
-                        app.logger.error(f'SSLエラーの詳細: プロトコル={e.reason}, エラーコード={e.errno if hasattr(e, "errno") else "不明"}')
-                        if app.debug:
-                            flash(f'SSL接続エラー: {e.reason}。メールサーバーの設定を確認してください。', 'error')
-                        else:
-                            flash('メールシステムに一時的な問題が発生しています。ご不便をおかけしますが、しばらく時間をおいて再度お試しください。', 'error')
-                    else:
-                        if app.debug:
-                            flash(f'メール送信エラー: {str(e)}', 'error')
-                        else:
-                            flash('申し訳ありません。お問い合わせの送信中にエラーが発生しました。しばらく時間をおいて再度お試しください。', 'error')
+                app.logger.error(f'メール送信エラー（{error_type}）:\n{error_details}')
+                app.logger.error(f'エラーの詳細情報: {str(e)}')
+
+                if isinstance(e, smtplib.SMTPAuthenticationError):
+                    app.logger.error('SMTP認証エラー: 認証情報を確認してください')
+                    flash('メールサーバーの認証に失敗しました。システム管理者に連絡してください。', 'error')
                     return render_template('contact.html')
+
+                elif isinstance(e, smtplib.SMTPServerDisconnected):
+                    app.logger.error('SMTPサーバー接続エラー: サーバーとの接続が切断されました')
+                    if retry_count < max_retries:
+                        time.sleep(retry_delay)
+                        continue
+
+                elif isinstance(e, ssl.SSLError):
+                    app.logger.error(f'SSLエラー: {e.reason if hasattr(e, "reason") else str(e)}')
+                    flash('セキュアな接続の確立に失敗しました。しばらく時間をおいて再度お試しください。', 'error')
+                    return render_template('contact.html')
+
+                elif isinstance(e, smtplib.SMTPRecipientsRefused):
+                    app.logger.error(f'受信者拒否エラー: {str(e)}')
+                    flash('メール送信に失敗しました。宛先アドレスを確認してください。', 'error')
+                    return render_template('contact.html')
+
+                if retry_count >= max_retries:
+                    app.logger.error('最大リトライ回数に達しました')
+                    if app.debug:
+                        flash(f'メール送信エラー: {error_type} - {str(e)}', 'error')
+                    else:
+                        flash('申し訳ありません。お問い合わせの送信中にエラーが発生しました。しばらく時間をおいて再度お試しください。', 'error')
+                    return render_template('contact.html')
+
+                time.sleep(retry_delay * retry_count)  # 再試行時の待機時間を徐々に増やす
 
         return redirect(url_for('contact'))
     return render_template('contact.html')
