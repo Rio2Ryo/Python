@@ -69,6 +69,19 @@ def news():
     news_items = News.query.order_by(News.date.desc()).paginate(page=page, per_page=6)
     return render_template('news.html', news_items=news_items)
 
+@app.route('/news/<int:news_id>')
+def news_detail(news_id):
+    try:
+        news = News.query.get_or_404(news_id)
+        return render_template('news_detail.html', news=news)
+    except Exception as e:
+        app.logger.error(f'ニュース詳細の取得エラー: {str(e)}')
+        return render_template('404.html'), 404
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
