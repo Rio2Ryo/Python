@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero" style="background-image: url('https://images.unsplash.com/photo-1681900525782-5af6ac1a9897');">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="display-4">ニュース</h1>
+        </div>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="row">
+            {% for news in news_items.items %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if news.image_url %}
+                    <img src="{{ news.image_url }}" class="card-img-top" alt="{{ news.title }}">
+                    {% else %}
+                    <img src="https://images.unsplash.com/photo-1718220216044-006f43e3a9b1" class="card-img-top" alt="デフォルト画像">
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ news.date.strftime('%Y年%m月%d日') }}</h6>
+                        <h5 class="card-title">{{ news.title }}</h5>
+                        <p class="card-text">{{ news.summary }}</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newsModal{{ news.id }}">
+                            詳細を見る
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="newsModal{{ news.id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ news.title }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% if news.image_url %}
+                            <img src="{{ news.image_url }}" class="img-fluid mb-3" alt="{{ news.title }}">
+                            {% endif %}
+                            <p class="text-muted">{{ news.date.strftime('%Y年%m月%d日') }}</p>
+                            <div class="news-content">
+                                {{ news.content|safe }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if news_items.pages > 1 %}
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if news_items.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('news', page=news_items.prev_num) }}">前へ</a>
+                        </li>
+                        {% endif %}
+
+                        {% for page_num in news_items.iter_pages() %}
+                            {% if page_num %}
+                                <li class="page-item {% if page_num == news_items.page %}active{% endif %}">
+                                    <a class="page-link" href="{{ url_for('news', page=page_num) }}">{{ page_num }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if news_items.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('news', page=news_items.next_num) }}">次へ</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

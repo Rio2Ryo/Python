@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero" style="background-image: url('https://images.unsplash.com/photo-1527752002957-af97f18a0c81');">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="display-4">会社概要</h1>
+        </div>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="section-title">企業理念</h2>
+                <p class="lead mb-5">
+                    テクノロジーの力で、人々の暮らしをより豊かに、ビジネスをより効率的に。
+                    私たちは、革新的なソリューションを通じて、持続可能な未来の創造に貢献します。
+                </p>
+
+                <h3 class="mb-4">会社情報</h3>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>社名</th>
+                            <td>株式会社ユニテクトル</td>
+                        </tr>
+                        <tr>
+                            <th>設立</th>
+                            <td>2010年4月1日</td>
+                        </tr>
+                        <tr>
+                            <th>資本金</th>
+                            <td>1億円</td>
+                        </tr>
+                        <tr>
+                            <th>代表取締役</th>
+                            <td>山田 太郎</td>
+                        </tr>
+                        <tr>
+                            <th>従業員数</th>
+                            <td>150名（2024年1月現在）</td>
+                        </tr>
+                        <tr>
+                            <th>所在地</th>
+                            <td>〒100-0001 東京都千代田区千代田1-1-1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
+                <img src="https://images.unsplash.com/photo-1681900525806-a7d3f266128c" alt="オフィス" class="img-fluid rounded mb-4">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section bg-light">
+    <div class="container">
+        <h2 class="section-title text-center">経営理念</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">革新</h4>
+                        <p class="card-text">常に最新のテクノロジーを追求し、革新的なソリューションを生み出します。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">信頼</h4>
+                        <p class="card-text">お客様との信頼関係を大切にし、確実な価値提供を約束します。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">成長</h4>
+                        <p class="card-text">社員一人一人の成長を支援し、組織全体の発展を目指します。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

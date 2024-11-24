@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero" style="background-image: url('https://images.unsplash.com/photo-1704440278730-b420f5892700');">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="display-4 mb-4">未来を創造する、<br>テクノロジーで世界をつなぐ</h1>
+            <p class="lead mb-4">最先端のソリューションで、ビジネスの可能性を広げます</p>
+            <a href="/contact" class="btn btn-primary btn-lg">お問い合わせ</a>
+        </div>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <h2 class="section-title text-center">私たちについて</h2>
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1681900525806-a7d3f266128c" alt="オフィス" class="img-fluid rounded">
+            </div>
+            <div class="col-md-6">
+                <h3 class="mb-4">革新的なソリューションを提供</h3>
+                <p>株式会社ユニテクトルは、最新のテクノロジーと創造的なアイデアを組み合わせ、
+                   お客様のビジネスに最適なソリューションを提供します。</p>
+                <a href="/about" class="btn btn-primary">詳しく見る</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section bg-light">
+    <div class="container">
+        <h2 class="section-title text-center">サービス</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1512799545738-0625ef92a288" class="card-img-top" alt="システム開発">
+                    <div class="card-body">
+                        <h5 class="card-title">システム開発</h5>
+                        <p class="card-text">お客様のニーズに合わせた、カスタマイズされたシステムを開発します。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1718220216044-006f43e3a9b1" class="card-img-top" alt="ITコンサルティング">
+                    <div class="card-body">
+                        <h5 class="card-title">ITコンサルティング</h5>
+                        <p class="card-text">経験豊富な専門家が、最適なIT戦略をご提案します。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1681900525782-5af6ac1a9897" class="card-img-top" alt="クラウドソリューション">
+                    <div class="card-body">
+                        <h5 class="card-title">クラウドソリューション</h5>
+                        <p class="card-text">最新のクラウドテクノロジーを活用したソリューションを提供します。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2 class="section-title text-center">最新ニュース</h2>
+        <div class="row">
+            {% for news in news_items %}
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ news.date }}</h6>
+                        <h5 class="card-title">{{ news.title }}</h5>
+                        <p class="card-text">{{ news.summary }}</p>
+                        <a href="/news/{{ news.id }}" class="card-link">詳細を見る</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

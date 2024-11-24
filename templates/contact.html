@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero" style="background-image: url('https://images.unsplash.com/photo-1704440278730-b420f5892700');">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="display-4">お問い合わせ</h1>
+        </div>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="contact-form">
+                    <h2 class="section-title text-center mb-5">お問い合わせフォーム</h2>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    <form id="contactForm" method="POST" action="{{ url_for('contact') }}">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">お名前 *</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="company" class="form-label">会社名</label>
+                            <input type="text" class="form-control" id="company" name="company">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">メールアドレス *</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">電話番号</label>
+                            <input type="tel" class="form-control" id="phone" name="phone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">お問い合わせ内容 *</label>
+                            <select class="form-select" id="subject" name="subject" required>
+                                <option value="">選択してください</option>
+                                <option value="システム開発">システム開発について</option>
+                                <option value="ITコンサルティング">ITコンサルティングについて</option>
+                                <option value="クラウドソリューション">クラウドソリューションについて</option>
+                                <option value="その他">その他</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">メッセージ *</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="privacy" required>
+                            <label class="form-check-label" for="privacy">
+                                <a href="/privacy" target="_blank">プライバシーポリシー</a>に同意します
+                            </label>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">送信する</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section bg-light">
+    <div class="container">
+        <h2 class="section-title text-center">アクセス</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>本社</h4>
+                <p>
+                    〒100-0001<br>
+                    東京都千代田区千代田1-1-1<br>
+                    TEL: 03-1234-5678<br>
+                    FAX: 03-1234-5679<br>
+                    Email: info@unitectol.co.jp
+                </p>
+                <h5 class="mt-4">アクセス方法</h5>
+                <p>
+                    東京メトロ千代田線 「東京駅」 丸の内北口より徒歩5分<br>
+                    JR線 「東京駅」 丸の内北口より徒歩7分
+                </p>
+            </div>
+            <div class="col-md-6">
+                <!-- Google Maps埋め込み -->
+                <div class="ratio ratio-16x9">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.4880141903403!2d139.75245187375246!3d35.68383662907137!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188bfbd89f700b%3A0x277c49ba34ed38!2z5p2x5Lqs6aeF!5e0!3m2!1sja!2sjp!4v1688457843757!5m2!1sja!2sjp"
+                            style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

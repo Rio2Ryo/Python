@@ -1,0 +1,149 @@
+:root {
+  --navy: #1a237e;
+  --platinum: #e8eaf6;
+  --text-dark: #263238;
+  --text-light: #ffffff;
+}
+
+body {
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+.navbar {
+  background-color: var(--navy);
+  padding: 1rem 2rem;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  color: var(--text-light) !important;
+}
+
+.nav-link {
+  color: var(--text-light) !important;
+  margin: 0 1rem;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--platinum);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.hero {
+  height: 80vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: var(--text-light);
+}
+
+.section {
+  padding: 5rem 0;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 3px;
+  background-color: var(--navy);
+  bottom: -10px;
+  left: 0;
+}
+
+.card {
+  border: none;
+  transition: transform 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.btn-primary {
+  background-color: var(--navy);
+  border-color: var(--navy);
+  padding: 0.75rem 2rem;
+}
+
+.btn-primary:hover {
+  background-color: #0d1b60;
+  border-color: #0d1b60;
+}
+
+.geometric-pattern {
+  background-image: url('../images/pattern.svg');
+  background-repeat: repeat;
+  opacity: 0.1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.contact-form {
+  background-color: var(--platinum);
+  padding: 3rem;
+  border-radius: 8px;
+}
+
+.footer {
+  background-color: var(--navy);
+  color: var(--text-light);
+  padding: 3rem 0;
+  margin-top: 5rem;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: 60vh;
+  }
+  
+  .section {
+    padding: 3rem 0;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+}
