@@ -1,4 +1,23 @@
 import os
+from datetime import datetime
+from flask import Flask, render_template, request, flash, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+from flask_admin import Admin as FlaskAdmin
+from flask_admin.contrib.sqla import ModelView
+from flask_ckeditor import CKEditor
+from flask_mail import Mail, Message
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+import ssl
+import smtplib
+import traceback
+import time
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///site.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+import os
 import ssl
 from flask_mail import Mail, Message
 from flask_admin import Admin as FlaskAdmin
@@ -44,13 +63,13 @@ logger = logging.getLogger('flask.app')
 
 # SSLコンテキストの設定
 # メール設定
-app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_SERVER'] = 'sv15011.xserver.jp'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'sv15011.xserver.jp')
-app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'info@connectsol-corp.com')
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'info@connectsol-corp.com'
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
-app.config['MAIL_DEFAULT_SENDER'] = ('株式会社コネクトソル', os.getenv('MAIL_USERNAME', 'info@connectsol-corp.com'))
+app.config['MAIL_DEFAULT_SENDER'] = ('株式会社コネクトソル', 'info@connectsol-corp.com')
 
 from models import News, Contact, Admin
 # Initialize Flask-Admin and CKEditor
