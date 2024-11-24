@@ -33,6 +33,11 @@ def services():
     return render_template('services.html')
 
 @app.route('/news')
+@app.route('/news/<int:id>')
+def news_detail(id):
+    news = News.query.get_or_404(id)
+    return render_template('news_detail.html', news=news)
+
 def news():
     page = request.args.get('page', 1, type=int)
     news_items = News.query.order_by(News.date.desc()).paginate(

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero" style="background-image: url('https://images.unsplash.com/photo-1681900525782-5af6ac1a9897');">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="display-4">ニュース詳細</h1>
+        </div>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <article class="news-article">
+                    <h2 class="mb-4">{{ news.title }}</h2>
+                    <p class="text-muted">{{ news.date.strftime('%Y年%m月%d日') }}</p>
+                    {% if news.image_url %}
+                    <img src="{{ news.image_url }}" class="img-fluid rounded mb-4" alt="{{ news.title }}">
+                    {% endif %}
+                    <div class="news-content">
+                        {{ news.content|safe }}
+                    </div>
+                    <div class="mt-5">
+                        <a href="{{ url_for('news') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> ニュース一覧に戻る
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

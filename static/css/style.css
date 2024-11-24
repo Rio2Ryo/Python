@@ -1,8 +1,11 @@
 :root {
-  --navy: #1a237e;
-  --platinum: #e8eaf6;
-  --text-dark: #263238;
+  --primary: #2c3e50;
+  --secondary: #34495e;
+  --accent: #d35400;
+  --background: #f8f9fa;
+  --text-dark: #2c3e50;
   --text-light: #ffffff;
+  --spacing-unit: 1rem;
 }
 
 body {
@@ -145,5 +148,107 @@ body {
   
   .section-title {
     font-size: 2rem;
+/* Japanese-inspired minimalist styles */
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
+  letter-spacing: 0.03em;
+  color: var(--text-dark);
+  background-color: var(--background);
+}
+
+.navbar {
+  background-color: var(--primary);
+  padding: calc(var(--spacing-unit) * 1.5) var(--spacing-unit);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.section {
+  padding: calc(var(--spacing-unit) * 5) 0;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  width: 40%;
+  height: 2px;
+  background-color: var(--accent);
+  bottom: -10px;
+  left: 0;
+}
+
+.card {
+  border: none;
+  border-radius: 0;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+}
+
+.news-article {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: calc(var(--spacing-unit) * 2);
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  border-radius: 0;
+  padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 2);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+  transform: translateY(-2px);
+}
+
+.hero-content {
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.contact-form {
+  background-color: white;
+  padding: calc(var(--spacing-unit) * 3);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.form-control {
+  border-radius: 0;
+  border: 1px solid #ddd;
+  padding: calc(var(--spacing-unit) * 0.75);
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: var(--primary);
+}
   }
 }
